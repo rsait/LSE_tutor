@@ -12,7 +12,7 @@ dash.register_page(__name__, path='/summary_user')
 
 layout = html.Div([
     html.H2('PERFORMANCE.'),
-    dbc.Label('Most confused configurations of the last 24 attemps:'),
+    dbc.Label('Most confused configurations of the last 25 attemps:'),
     html.Br(),
     dbc.Table(id='table-results', style={'margin-top':'25px', 'display':'none'}),
     dcc.Interval(id='b',interval=1000,n_intervals=0),
