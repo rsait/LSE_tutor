@@ -6,6 +6,7 @@ from flask import Flask, Response
 import cv2
 import pages.mediapipe_wrapper as mpu
 import mediapipe as mp
+import sys
 
 #Mediapipe
 mp_drawing = mp.solutions.drawing_utils
@@ -126,5 +127,8 @@ def video_mediapipe_feed():
 
 
 if __name__ == "__main__":
-    app.run_server(host='127.0.0.1', debug=True)
+    host_address = "127.0.0.1"
+    if len(sys.argv) > 1:
+        host_address = sys.argv[1]
+    app.run_server(host=host_address, debug=True)
 
