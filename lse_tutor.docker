@@ -1,0 +1,37 @@
+# To build this image:
+# docker build -f lse_tutor.docker -t lse_tutor .
+# 
+# To run this container:
+# 
+# docker run -it --rm -e DISPLAY=unix$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -p 8050:8050 --device /dev/video0 lse_tutor /bin/bash -c 'cat /lse_tutor.readme.txt; cd /lse_tutor; python3 app.py 0.0.0.0'
+
+#Download base image ubuntu
+FROM ubuntu:20.04
+
+# LABEL about the custom image
+LABEL maintainer="nobody@nowhere.com"
+LABEL version="0.1"
+LABEL description="LSE tutor"
+
+# Disable Prompt During Packages Installation
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && \
+    apt-get install -y python3-pip
+    
+RUN apt-get install -y libgl1-mesa-glx libglib2.0-0 libsm6 libxrender1 libxext6
+    
+RUN pip install dash && \
+    pip install dash_labs && \
+    pip install dash_bootstrap_components
+
+RUN pip install mediapipe
+RUN pip install pandas
+RUN pip install scipy
+    
+COPY lse_tutor.readme.txt /
+
+RUN mkdir lse_tutor
+COPY . lse_tutor
+
+
