@@ -25,6 +25,9 @@ layout = html.Div([
     ], style = {'width':'49%','display':'inline-block','verticalAlign':'top'}),
     html.Div([
         html.Div([
+            html.H3('Choose which hand you are using'),
+            dcc.RadioItems(id = 'which-hand', options=['Right hand', 'Left hand'], value='Right hand', inputStyle={"margin-right": "5px", 'cursor': 'pointer', 'margin-left':'20px'}),
+            html.Br(),
             html.H3('Choose a configuration to practice'),
             dcc.Dropdown(
                 id='config-medoid',
@@ -84,13 +87,19 @@ def show_medoid_graph(configuration):
 
 @callback([Output('textarea-prediction-output','children'), Output('textarea-prediction-output','style'), 
           Output('img-config-wrong','src'), Output('textarea-prediction-wrong','children'),
-          Output('store-user-performance','data')],
+          Output('store-user-performance-prueba','data')], #Output('store-user-performance','data'), 
           Input('interval-prediction','n_intervals'),
-          [State('config-medoid','value'), State('textarea-prediction-output','style'), State('store-user-performance','data')])
-def make_prediction_medoid(interval, config_value, actual_style, saved_preds):
-    from global_ import landmarks
+          [State('config-medoid','value'), State('textarea-prediction-output','style'), 
+          State('store-user-performance-prueba','data'), State('which-hand','value')]) #State('store-user-performance','data'),
+def make_prediction_medoid(interval, config_value, actual_style, data, which_hand):
+    import global_
     png_actual = None
     text = None
+    if (which_hand=='Right hand'):
+        landmarks = global_.landmarks_right
+    else:
+        landmarks = global_.landmarks_left
+    
     if landmarks is not None:
         landmarks_to_predict = help_functions.transform_data(landmarks)
 
@@ -100,20 +109,23 @@ def make_prediction_medoid(interval, config_value, actual_style, saved_preds):
 
         if result == config_value:
             style = {'backgroundColor':'#99FF99'}
+            data['correct'] += 1 
         else:
             png_actual = pngs[int(result)-1]
             text = 'The hand configuration you are performing looks like the image below. Try again!'
             style = {'backgroundColor':'#FF9999'}
 
-            # GUARDAR SOLO LOS FALLOS
-            if(len(saved_preds['pred'])>24):
-                saved_preds['pred'].pop(0)
-                saved_preds['real'].pop(0)
+            data['errors'][int(config_value)-1][int(result)-1] +=1
 
-            saved_preds['pred'].append(result)
-            saved_preds['real'].append(config_value)
+            # # GUARDAR SOLO LOS FALLOS
+            # if(len(saved_preds['pred'])>24):
+            #     saved_preds['pred'].pop(0)
+            #     saved_preds['real'].pop(0)
 
+            # saved_preds['pred'].append(result)
+            # saved_preds['real'].append(config_value)
 
+        data['total'] += 1 
         # #tr1, tr2 = medoid_functions.procrustes_disparity_transformed_matrices(medoids[min_index],landmarks_to_predict)
         # for finger in range(5):
         #     medoid_finger = medoids[min_index][finger*4+1:finger*4+5,:]
@@ -127,6 +139,6 @@ def make_prediction_medoid(interval, config_value, actual_style, saved_preds):
         #     if not close:
         #         result = result + ' - Please pay attention to your ' + fingers[finger] + ' finger'
 
-        return result, style, png_actual, text, saved_preds
+        return result, style, png_actual, text, data #saved_preds,
 
-    return '', actual_style, png_actual, text, saved_preds
+    return '', actual_style, png_actual, text, data #saved_preds, 

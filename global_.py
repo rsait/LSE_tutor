@@ -1,8 +1,9 @@
 import pickle as pkl
 import base64
 
-landmarks = None
-frame = None
+landmarks_right = None
+landmarks_left = None
+# frame = None
 
 configurations = ['{}'.format(x) for x in range(1,43)]
 

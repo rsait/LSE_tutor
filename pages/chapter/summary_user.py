@@ -1,19 +1,17 @@
 from dash import dcc, html, Input, Output, State, callback
 import dash_bootstrap_components as dbc
 import dash
-import numpy as np
-import pickle as pkl
-from pages import medoid_functions
-from pages import help_functions
-import base64
 import pandas as pd
 from dash import dash_table
+import numpy as np
 
 dash.register_page(__name__, path='/summary_user')
 
 layout = html.Div([
     html.H2('PERFORMANCE.'),
-    dbc.Label('Most confusing configurations of the last 25 attempts:'),
+    html.B(id='textarea-correct-percentage', style={'whiteSpace': 'pre','margin-bottom':'20px'}),
+    html.Br(),
+    dbc.Label('These are the ten most confusing configurations in your attemps.'),
     html.Br(),
     dash_table.DataTable(id='table-performance',row_selectable="single"),
     dcc.Interval(id='b',interval=1000,n_intervals=0),
@@ -29,27 +27,39 @@ layout = html.Div([
     ],id='images-performance',style={'display':'none'}),
     html.Div([
         dbc.Button('Continue learning',n_clicks=0,outline=True, color='primary',id='button-performance',href='/medoids')
-    ],style={'margin-top':'20px'})
+    ],style={'margin-top':'20px'}),
 ],id='container-performance')
 
 
 
 @callback([Output(component_id='table-performance', component_property='data'),
-     Output(component_id='table-performance', component_property='columns')],#[Output('table-results','children'), Output('table-results','style')],
-          Input('store-user-performance', 'modified_timestamp'),
-          Input('store-user-performance','data')) #Input('b','interval'), 
-def print_now(ts, data):
-    df = pd.DataFrame.from_dict(data)
-    df = df.groupby(df.columns.tolist(),as_index=False).size()
-    df = df.sort_values('size', ascending=False)
+     Output(component_id='table-performance', component_property='columns'),
+     Output('textarea-correct-percentage','children')],#[Output('table-results','children'), Output('table-results','style')],
+          Input('store-user-performance-prueba', 'modified_timestamp'),
+          Input('store-user-performance-prueba','data')) #Input('b','interval'), Input('store-user-performance','data')
+def print_now(ts, data): #saved_preds,
 
-    df.columns = ['Chosen configuration', 'Performed configuration', '# Wrong performances']
+    if data['total'] != 0:
+        real_config, predicted =np.where(np.array(data['errors'])!=0)
+        values = [data['errors'][real][pred] for real,pred in zip(real_config,predicted)]
 
-    columns = [{'name': col, 'id': col} for col in df.columns]
-    data = df.to_dict(orient='records')
+        df = pd.DataFrame({'real':np.array(real_config)+1,
+                            'pred': np.array(predicted)+1,
+                            'size': [round(x,2) for x in np.array(values)/data['total']]})
 
-    return data, columns
+        # df = pd.DataFrame.from_dict(saved_preds)
+        # df = df.groupby(df.columns.tolist(),as_index=False).size()
+        df = df.sort_values('size', ascending=False)
 
+        df.columns = ['Chosen configuration', 'Performed configuration', '% Wrong performances']
+
+        columns = [{'name': col, 'id': col} for col in df.columns]
+        saved_preds = df.head(10).to_dict(orient='records')
+
+        return saved_preds, columns, 'The ' + str(round(data['correct']/data['total'],2)) + '% of the trials were well performed.' 
+    
+    else:
+        return None, None, None
 
 
 @callback([Output('images-performance','style'), Output('real-config','children'), Output('real-img','src'), 
@@ -61,12 +71,12 @@ def show_configs(selected_rows, data):
         real_sel = data[selected]['Chosen configuration']
         pred_sel = data[selected]['Performed configuration']
 
-        text1 = 'You have selected to practice configuration '+ real_sel
-        text2 = 'But you have performed configuration '+ pred_sel
+        text1 = 'You have selected to practice configuration '+ str(real_sel)
+        text2 = 'But you have performed configuration '+ str(pred_sel)
 
         from global_ import pngs
-        img1 = pngs[int(real_sel)-1]
-        img2 = pngs[int(pred_sel)-1]
+        img1 = pngs[real_sel-1]
+        img2 = pngs[pred_sel-1]
 
         return {'display':'inline-block'}, text1 , img1, text2, img2
     

@@ -7,13 +7,14 @@ import cv2
 import pages.mediapipe_wrapper as mpu
 import mediapipe as mp
 import sys
+import numpy as np
 
 #Mediapipe
 mp_drawing = mp.solutions.drawing_utils
 mp_holistic = mp.solutions.holistic
 
 holistic_instance = mpu.MediapipeHolistic()
-landmarks_now = None
+#landmarks_now = None
 
 class VideoCamera(object):
     def __init__(self):
@@ -53,7 +54,8 @@ navbar = dbc.NavbarSimple(
 
 app.layout = dbc.Container(
     [
-        dcc.Store(id='store-user-performance',data={'real':[],'pred':[]}),#, 'times':[]}),
+        dcc.Store(id='store-user-performance-prueba', data={'total':0,'correct':0,'errors':np.zeros(shape=(42,42))}),
+        #dcc.Store(id='store-user-performance',data={'real':[],'pred':[]}),#, 'times':[]}),
         navbar,
         dbc.Row(
             [
@@ -100,16 +102,22 @@ def gen_last_frame(camera):
         mp_drawing.draw_landmarks(
             annotated_image, results.pose_landmarks, mp_holistic.POSE_CONNECTIONS)
         
-        # Save right hand landmaks in landmarks_now variable.
-        if (holistic_instance.there_is_right_hand()):
-            landmarks_now = holistic_instance.landmarks_to_array("RIGHT",flatten=False)
-        else:
-            landmarks_now = None #np.empty(shape=(21*3))
-
         import global_
-        #landmarks = landmarks_now
-        global_.landmarks = landmarks_now
-        #global_.frame = frame #global_frame
+        # Save right hand landmaks in landmarks_now variable.
+        if(holistic_instance.there_is_right_hand()):
+            global_.landmarks_right = holistic_instance.landmarks_to_array("RIGHT",flatten=False)
+        else:
+            global_.landmarks_right = None #np.empty(shape=(21*3))
+
+        if(holistic_instance.there_is_left_hand()):
+            global_.landmarks_left = holistic_instance.landmarks_to_array("LEFT", flatten=False)
+        else:
+            global_.landmarks_left = None #np.empty(shape=(21*3))
+
+        # import global_
+        # #landmarks = landmarks_now
+        # global_.landmarks = landmarks_now
+        # #global_.frame = frame #global_frame
 
         # gray_frame = cv2.cvtColor(global_frame, cv2.COLOR_BGR2GRAY)
         ret, jpeg = cv2.imencode('.jpg', annotated_image)
