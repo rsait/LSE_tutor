@@ -113,7 +113,7 @@ def gen_last_frame(camera):
             global_.landmarks_left = holistic_instance.landmarks_to_array("LEFT", flatten=False)
         else:
             global_.landmarks_left = None #np.empty(shape=(21*3))
-
+        
         # import global_
         # #landmarks = landmarks_now
         # global_.landmarks = landmarks_now

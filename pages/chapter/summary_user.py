@@ -45,7 +45,7 @@ def print_now(ts, data): #saved_preds,
 
         df = pd.DataFrame({'real':np.array(real_config)+1,
                             'pred': np.array(predicted)+1,
-                            'size': [round(x,2) for x in np.array(values)/data['total']]})
+                            'size': [round(x,2) for x in np.array(values)/data['total']*100.0]})
 
         # df = pd.DataFrame.from_dict(saved_preds)
         # df = df.groupby(df.columns.tolist(),as_index=False).size()
@@ -56,7 +56,7 @@ def print_now(ts, data): #saved_preds,
         columns = [{'name': col, 'id': col} for col in df.columns]
         saved_preds = df.head(10).to_dict(orient='records')
 
-        return saved_preds, columns, 'The ' + str(round(data['correct']/data['total'],2)) + '% of the trials were well performed.' 
+        return saved_preds, columns, 'The ' + str(round(data['correct']/data['total']*100.0,2)) + '% of the trials were well performed.' 
     
     else:
         return None, None, None
