@@ -22,6 +22,15 @@ from global_ import configurations, medoids, pngs, figures_medoids #, fingers
 layout = html.Div([
     html.Div([
         html.Img(id='video', src='/user/configurations/video_mediapipe_feed'),
+        html.Div([
+            html.Div(id='textarea-prediction-output', style={'whiteSpace': 'pre','width':'49%'}),
+            html.Div(id='textarea-prediction-wrong', style={'whiteSpace': 'pre','width':'49%'}),
+            html.Div(html.Img(id='img-config-wrong',src=None,style={'height':'20%', 'width':'20%'}),style={'width':'49%','display':'inline-block','verticalAlign':'top'}),
+            #dcc.Store(id='store-user-performance',data={'real':[],'pred':[], 'times':[]}),
+            html.Div([
+                dbc.Button('PERFORMANCE SUMMARY',n_clicks=0,outline=True, color='primary',id='button-performance',href='/summary_user'),
+            ]),  
+        ], style={'display':'block'})
     ], style = {'width':'49%','display':'inline-block','verticalAlign':'top'}),
     html.Div([
         html.Div([
@@ -65,14 +74,6 @@ layout = html.Div([
                     n_intervals=0
         ),
     ], id='div-medoid', style={'display':'inline-block', 'width':'49%'}),
-    
-    html.Div(id='textarea-prediction-output', style={'whiteSpace': 'pre','width':'49%'}),
-    html.Div(id='textarea-prediction-wrong', style={'whiteSpace': 'pre','width':'49%'}),
-    html.Div(html.Img(id='img-config-wrong',src=None,style={'height':'10%', 'width':'10%'}),style={'width':'49%','display':'inline-block','verticalAlign':'top'}),
-    #dcc.Store(id='store-user-performance',data={'real':[],'pred':[], 'times':[]}),
-    html.Div([
-        dbc.Button('PERFORMANCE SUMMARY',n_clicks=0,outline=True, color='primary',id='button-performance',href='/summary_user'),
-    ]),  
     
 ])
 
