@@ -14,7 +14,6 @@ layout = html.Div([
     dbc.Label('These are the ten most confusing configurations in your attemps.'),
     html.Br(),
     dash_table.DataTable(id='table-performance',row_selectable="single"),
-    dcc.Interval(id='b',interval=1000,n_intervals=0),
     html.Div([
         html.Div([
             html.H5(id='real-config'),
@@ -36,7 +35,7 @@ layout = html.Div([
      Output(component_id='table-performance', component_property='columns'),
      Output('textarea-correct-percentage','children')],#[Output('table-results','children'), Output('table-results','style')],
           Input('store-user-performance-prueba', 'modified_timestamp'),
-          Input('store-user-performance-prueba','data')) #Input('b','interval'), Input('store-user-performance','data')
+          Input('store-user-performance-prueba','data')) #Input('store-user-performance','data')
 def print_now(ts, data): #saved_preds,
 
     if data['total'] != 0:

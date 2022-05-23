@@ -26,6 +26,7 @@ layout = html.Div([
         html.Div('For a first contact with sign language, here you can learn and practise the 42 configurations of the LSE, shown on the image below.'),
         html.Div(html.Img(id='img-config-medoid',src='data:image/png;base64,{}'.format(base64.b64encode(open("dataset/configs.png", 'rb').read()).decode()),style={'width':'70%','height':'70%'}),style={'textAlign':'center'}),
         dbc.Button('LEARN CONFIGURATIONS', outline=True, color="danger", href='/medoids/'),
+        dbc.Button('PRACTICE CONFIGURATIONS WITH SIGNS', outline=True, color="success", href='/practice_signs/'),
     ], style={'width':'100%', 'display':'inline-block'}, className="d-grid gap-2 col-6 mx-auto"),                           
 
 ], style={'display':'flex'})
