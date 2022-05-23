@@ -11,7 +11,7 @@ import pandas as pd
 
 dash.register_page(__name__, path='/medoids')
 
-from global_ import configurations, medoids, figures_medoids, pngs #, fingers
+from global_ import configurations, medoids, pngs, figures_medoids #, fingers
 
 # medoids = [help_functions.transform_data(medoid_functions.get_shape_medoid(
 #            pkl.load(open('dataset/configs/' + config + '/itsaso_newCam.pkl','rb')))) for config in configurations]

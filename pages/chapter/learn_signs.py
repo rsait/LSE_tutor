@@ -96,7 +96,6 @@ def change_topic(topic):
     global_.index = 0
 
     new_options=[dict((('label',signo), ('value',signo))) for signo in signs_table[signs_table['TOPIC']==topic]['SIGNO']]
-    print(new_options[0]['value'])
     return new_options, new_options[0]['value']
 
 @callback([Output('sign-img','src'),Output('video-sign','src'), Output('first-img','src'), Output('second-img','src'),
@@ -106,7 +105,6 @@ def show_selected_sign(sign_name):
 
     import global_
     global_.index = 0
-    print(sign_name)
 
     first_conf = signs_table[signs_table['SIGNO']==sign_name]['CONFIG INICIO'].to_string(index=False)
     last_conf = signs_table[signs_table['SIGNO']==sign_name]['CONFIG FINAL'].to_string(index=False)

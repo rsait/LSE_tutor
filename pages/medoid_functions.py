@@ -65,8 +65,17 @@ def obtain_graph(medoid, animate=False):
             # title='Animation Test',
             width=1200,
             height=1200,
-            scene_camera_eye=dict(x=x_eye, y=y_eye, z=z_eye)
+            scene_camera_eye=dict(x=x_eye, y=y_eye, z=z_eye),
+            margin=dict(
+                l=50,
+                r=50,
+                b=50,
+                t=50,
+                pad=4
+            ),
+            autosize=False
         )
+
     else:
         fig3.update_layout(
             # title='Animation Test',
