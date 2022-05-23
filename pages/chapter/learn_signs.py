@@ -150,29 +150,15 @@ def pred(n, st1,st2, which_hand, data):
             st1 = styles[global_.index]
             global_.index = int(not global_.index)
             st2 = styles[global_.index]
-            # if global_.index==0:
-            #     st1 = styles[0]
-            #     st2 = styles[1]
-            #     global_.index=1
-            # else:
-            #     st1 = styles[1]
-            #     st2 = styles[0]
-            #     global_.index=0
         
         else:
-            st1 = styles[global_.index+1]
+            st1 = styles[global_.index-1] if global_.index==1 else styles[global_.index+1] #styles[global_.index+1]
 
-            st2 = styles[1] if global_.index ==1 else styles[2]
-            # if global_.index==0:
-            #     st1 = styles[1]
-            #     st2 = styles[2]
-            # else:
-            #     st1 = styles[2]
-            #     st2 = styles[1]
+            st2 = styles[1] if global_.index==1 else styles[2]
 
     else:
-        st1 = styles[global_.index+1]
+        st1 = styles[global_.index-1] if global_.index==1 else styles[global_.index+1]
         st2 = styles[1] if global_.index ==1 else styles[2]
-        
+
     return st1, st2
 
