@@ -92,6 +92,9 @@ layout = html.Div([
           Input('sign-dropdown-topic','value'),prevent_initial_call=True)
 def change_topic(topic):
 
+    import global_
+    global_.index = 0
+
     new_options=[dict((('label',signo), ('value',signo))) for signo in signs_table[signs_table['TOPIC']==topic]['SIGNO']]
     print(new_options[0]['value'])
     return new_options, new_options[0]['value']
@@ -167,5 +170,9 @@ def pred(n, st1,st2, which_hand, data):
             #     st1 = styles[2]
             #     st2 = styles[1]
 
+    else:
+        st1 = styles[global_.index+1]
+        st2 = styles[1] if global_.index ==1 else styles[2]
+        
     return st1, st2
 
