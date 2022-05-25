@@ -68,18 +68,7 @@ layout = html.Div([
             dcc.Store(id='store-configs',data=[]),
             dcc.Store(id='index-conf',data=0),
             html.Br(),
-            html.Div([
-                html.Div([
-                    html.Img(id='first-img',src=None,
-                            style={'height':'50%', 'width':'50%',
-                            'margin-left':'20px','border':'2px red solid', 
-                            'backgroundColor':'#EF989F','padding':'10px'})
-                ],style={'width':'49%','display':'inline-block'}),
-                html.Div([
-                    html.Img(id='second-img',src=None,
-                            style={'height':'50%', 'width':'50%'})
-                ], style={'width':'49%','display':'inline-block'})
-            ,],id='images-sign')
+            html.Div(id='images-sign')
         ],id='imgs-conf-sign',style={'display':'none','margin-top':'20px'})
     ],style = {'width':'49%','display':'inline-block'}),
 ],id='container-performance')
