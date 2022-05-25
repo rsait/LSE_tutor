@@ -1,3 +1,4 @@
+import imp
 from dash import dcc, html, Input, Output, State, callback
 import dash_bootstrap_components as dbc
 import dash
@@ -72,17 +73,17 @@ layout = html.Div([
             dcc.Store(id='index-conf',data=0),
             html.Br(),
             html.Div([
-                html.H5(id='first-config'),
-                html.Img(id='first-img',src=None,
-                         style={'height':'50%', 'width':'50%',
-                         'margin-left':'20px','border':'2px red solid', 
-                         'backgroundColor':'#EF989F','padding':'10px'})
-            ],style={'width':'49%','display':'inline-block'}),
-            html.Div([
-                html.H5(id='second-config'),
-                html.Img(id='second-img',src=None,
-                        style={'height':'50%', 'width':'50%'})
-            ], style={'width':'49%','display':'inline-block'})
+                html.Div([
+                    html.Img(id='first-img',src=None,
+                            style={'height':'50%', 'width':'50%',
+                            'margin-left':'20px','border':'2px red solid', 
+                            'backgroundColor':'#EF989F','padding':'10px'})
+                ],style={'width':'49%','display':'inline-block'}),
+                html.Div([
+                    html.Img(id='second-img',src=None,
+                            style={'height':'50%', 'width':'50%'})
+                ], style={'width':'49%','display':'inline-block'})
+            ,],id='images-sign')
         ],id='imgs-conf-sign',style={'display':'none','margin-top':'20px'})
     ],style = {'width':'49%','display':'inline-block'}),
 ],id='container-performance')
@@ -98,37 +99,45 @@ def change_topic(topic):
     new_options=[dict((('label',signo), ('value',signo))) for signo in signs_table[signs_table['TOPIC']==topic]['SIGNO']]
     return new_options, new_options[0]['value']
 
-@callback([Output('sign-img','src'),Output('video-sign','src'), Output('first-img','src'), Output('second-img','src'),
+@callback([Output('sign-img','src'),Output('video-sign','src'), Output('images-sign','children'),
            Output('imgs-conf-sign','style'),Output('div-sel-sign','style'), Output('store-configs','data')],
-           Input('sign-dropdown','value'))#, prevent_initial_call=True)
-def show_selected_sign(sign_name):
-
+           Input('sign-dropdown','value'))
+def show_all_images(sign_name):
+    
     import global_
     global_.index = 0
 
-    first_conf = signs_table[signs_table['SIGNO']==sign_name]['CONFIG INICIO'].to_string(index=False)
-    last_conf = signs_table[signs_table['SIGNO']==sign_name]['CONFIG FINAL'].to_string(index=False)
+    configs = signs_table[signs_table['SIGNO']==sign_name]['CONFIGS'].to_string(index=False).split(',')
+    num_configs = len(configs)
+    width = str(round(100/num_configs))+'%' if num_configs!=1 else '49%'
+    
+    children = [html.Div([
+        html.Img(id={'type':'img-sign','index':index},src=pngs[int(config)-1],
+                style={'height':'50%', 'width':'50%',
+                'margin-left':'20px','padding':'10px'})
+    ],style={'width':width,'display':'inline-block'}) for index, config in enumerate(configs)]
+    data_confs = configs
+
     sign_path_name = signs_table[signs_table['SIGNO']==sign_name]['PATH_IMG'].to_string(index=False)
     path_sign_img = 'dataset/images_signs/'+ sign_path_name + '.png'
     path_sign_vid = '/static/' + sign_path_name + '.mov'
-
-    img1_src=pngs[int(first_conf)-1]
-    img2_src=pngs[int(last_conf)-1]
     imgSigno_src='data:image/png;base64,{}'.format(base64.b64encode(open(path_sign_img, 'rb').read()).decode())
 
     style={'display':'inline-block','margin-top':'20px'}
     style2={'display':'flex','margin-top':'20px'}
 
-    return imgSigno_src, path_sign_vid, img1_src, img2_src, style, style2, [first_conf,last_conf]
+    return imgSigno_src, path_sign_vid, children, style, style2, data_confs
 
-@callback(Output('first-img','style'),Output('second-img','style'),
+@callback(Output({'type':'img-sign','index':dash.dependencies.ALL},'style'),
           Input('pred-sign-interval','n_intervals'),
-          [State('first-img','style'), State('second-img','style'),
-          State('which-hand-sign','value'), State('store-configs','data')],
+          [State('which-hand-sign','value'), State('store-configs','data')],
           prevent_initial_call=True)
-def pred(n, st1,st2, which_hand, data):
+def pred3(n, which_hand, data):
 
     import global_
+
+    imgs_number = len(dash.callback_context.outputs_list)
+    return_styles = np.empty(shape=imgs_number,dtype=object)
 
     conf_actual = data[global_.index]
     
@@ -145,18 +154,21 @@ def pred(n, st1,st2, which_hand, data):
         result = configurations[min_index]
 
         if result==conf_actual:
-            st1 = styles[global_.index]
-            global_.index = int(not global_.index)
-            st2 = styles[global_.index]
-        
+            prev = global_.index
+            return_styles[0:global_.index+1]=styles[0]
+            if imgs_number>1:
+                global_.index = (global_.index+1) % imgs_number
+                return_styles[global_.index]=styles[1]
+                return_styles[global_.index+1:]=styles[2]
+            return_styles[prev]=styles[0]
         else:
-            st1 = styles[global_.index-1] if global_.index==1 else styles[global_.index+1] #styles[global_.index+1]
-
-            st2 = styles[1] if global_.index==1 else styles[2]
+            return_styles[0:global_.index] = styles[0]
+            return_styles[global_.index] = styles[1]
+            return_styles[global_.index+1:] = styles[2]
 
     else:
-        st1 = styles[global_.index-1] if global_.index==1 else styles[global_.index+1]
-        st2 = styles[1] if global_.index ==1 else styles[2]
+        return_styles[0:global_.index] = styles[0]
+        return_styles[global_.index] = styles[1]
+        return_styles[global_.index+1:] = styles[2]
 
-    return st1, st2
-
+    return [ret_sty for ret_sty in return_styles]
