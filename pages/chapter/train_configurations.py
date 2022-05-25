@@ -1,13 +1,9 @@
-from dash import dcc, html, Input, Output, State, callback, dash_table
+from dash import dcc, html, Input, Output, State, callback
 import dash_bootstrap_components as dbc
 import dash
 import numpy as np
-import pickle as pkl
 from pages import medoid_functions
 from pages import help_functions
-import base64
-import pandas as pd
-
 
 dash.register_page(__name__, path='/medoids')
 

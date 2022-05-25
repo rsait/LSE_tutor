@@ -1,9 +1,5 @@
-import imp
 from dash import dcc, html, Input, Output, State, callback
-import dash_bootstrap_components as dbc
 import dash
-import pandas as pd
-from dash import dash_table
 import numpy as np
 import base64
 from pages import medoid_functions
