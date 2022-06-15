@@ -11,7 +11,7 @@ layout = html.Div([
     html.H2('PERFORMANCE.'),
     html.B(id='textarea-correct-percentage', style={'whiteSpace': 'pre','margin-bottom':'20px'}),
     html.Br(),
-    dbc.Label('These are the ten most confusing configurations in your attemps.'),
+    dbc.Label('These are the ten most confusing configurations in your attempts.'),
     html.Br(),
     dash_table.DataTable(id='table-performance',row_selectable="single"),
     html.Div([
