@@ -127,3 +127,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Remove signs images and videos from github
+static/
+dataset/images_signs/
+
