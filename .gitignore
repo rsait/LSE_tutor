@@ -129,6 +129,6 @@ dmypy.json
 .pyre/
 
 # Remove signs images and videos from github
-static/
-dataset/images_signs/
+static/*
+dataset/images_signs/*
 
