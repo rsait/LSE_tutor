@@ -23,7 +23,7 @@ The web server starts and to connect to it go to http://0.0.0.0:8050/ in a tab i
 
 The application is divided in two different functionalities:
 
-### 1. *LEARN CONFIGURATIONS*
+### 1. LEARN CONFIGURATIONS
 
 After choosing which configuration to practice and with which hand, the image and 3d plot of the chosen configuration is displayed as shown in the image below. 
 
@@ -35,7 +35,7 @@ A record of the performance is also saved and you can access it by pressing `PER
 
 <img src="/images/app2.png" width="400">
 
-### 2. *PRACTICE CONFIGURATIONS WITH SIGNS*
+### 2. PRACTICE CONFIGURATIONS WITH SIGNS
 
 There is also the opportunity to practice the configurations corresponding to different signs. You can choose a category on the first dropdown and a sign corresponding to that category on the second dropdown. When a sign is chosen, the sorted configurations sequence that must be performed for that sign is shown.
 
