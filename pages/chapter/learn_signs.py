@@ -10,9 +10,9 @@ dash.register_page(__name__, path='/practice_signs')
 from global_ import signs_table, pngs, configurations, medoids, styles
 
 layout = html.Div([
-    html.H2('SIGNS.'),
+    html.H2('SIGNS'),
     html.B('Choose a sign to practice its configurations',style={'margin-bottom':'20px'}),
-    html.Div('After choosing a sign, the configurations that form that signs are going to appear in the screen.You will have to reproduce them correctly.'),
+    html.Div('After choosing a sign, the configurations that form that sign are going to appear in the screen. You will have to reproduce them correctly.'),
     html.Br(),
     html.Div([
         html.Img(id='video', src='/user/configurations/video_mediapipe_feed'),
@@ -26,6 +26,7 @@ layout = html.Div([
                     persistence_type='session',
                     inputStyle={"margin-right": "5px", 'cursor': 'pointer', 'margin-left':'20px','margin-bottom':'20px'}
         ),
+        html.Label(['Topic:'], style={'font-weight': 'bold', "text-align": "center"}),
         dcc.Dropdown(
             id='sign-dropdown-topic',
             options=[dict((('label',topic), ('value',topic))) for topic in np.unique(signs_table['TOPIC'])],
@@ -36,6 +37,7 @@ layout = html.Div([
             #placeholder='Select sign...',
             style = {'width':'100%','display':'inline-block'},
         ),
+        html.Label(['Word:'], style={'font-weight': 'bold', "text-align": "center"}),
         dcc.Dropdown(
             id='sign-dropdown',
             options=[dict((('label',signo), ('value',signo))) for signo in signs_table[signs_table['TOPIC']==signs_table['TOPIC'][0]]['SIGNO']],
@@ -65,7 +67,7 @@ layout = html.Div([
         #     html.Video(id='video-sign',src=None, controls=True, style={'height':'37%', 'width':'37%','margin-left':'20px'})
         # ], id='div-sel-sign',style={'display':'none'}),
         html.Div([
-            html.Div('These are the configurations you must perform:'),
+            html.Div('These are the configurations you must perform:',id='text_configs_number'),
             dcc.Store(id='store-configs',data=[]),
             dcc.Store(id='index-conf',data=0),
             html.Br(),
@@ -86,7 +88,7 @@ def change_topic(topic):
     return new_options, new_options[0]['value']
 
 @callback([Output('images-sign','children'), Output('imgs-conf-sign','style'),
-           Output('store-configs','data')], 
+           Output('store-configs','data'), Output('text_configs_number','children')], 
            #Output('sign-img','src'),Output('video-sign','src'), Output('div-sel-sign','style'),
            Input('sign-dropdown','value'))
 def show_all_images(sign_name):
@@ -110,11 +112,16 @@ def show_all_images(sign_name):
     # path_sign_img = 'dataset/images_signs/'+ sign_path_name + '.png'
     # path_sign_vid = '/static/' + sign_path_name + '.mov'
     # imgSigno_src='data:image/png;base64,{}'.format(base64.b64encode(open(path_sign_img, 'rb').read()).decode())
+    # style2={'display':'flex','margin-top':'20px'}
 
     style={'display':'inline-block','margin-top':'20px'}
-    style2={'display':'flex','margin-top':'20px'}
+    
+    if num_configs==1:
+        text_configs_number = 'This is the configuration you must perform:'
+    else:
+        text_configs_number = 'These are the ' + str(num_configs) + ' configurations you must perform:'
 
-    return children, style, data_confs #,imgSigno_src, path_sign_vid, style2
+    return children, style, data_confs, text_configs_number #,imgSigno_src, path_sign_vid, style2
 
 @callback(Output({'type':'img-sign','index':dash.dependencies.ALL},'style'),
           Input('pred-sign-interval','n_intervals'),

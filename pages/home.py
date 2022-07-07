@@ -11,7 +11,7 @@ dash.register_page(__name__, path="/")
 
 layout = html.Div([
     html.Div([
-        html.Div("In the Spanish Sign Language, apart from the body position and facial expression, four different manual elements define the articulation of the sign:"),
+        html.Div("In the Spanish Sign Language (LSE), apart from the body position and facial expression, four different manual elements define the articulation of the sign:"),
         #html.Div(html.Img(id='img-config-medoid',src='data:image/png;base64,{}'.format(base64.b64encode(open("dataset/elements.png", 'rb').read()).decode()))),#style={'width':'40%','height':'40%'})),
         html.Div(
             children=[
