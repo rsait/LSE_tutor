@@ -25,11 +25,11 @@ The application is divided in two different functionalities:
 
 ### 1. LEARN CONFIGURATIONS
 
-After choosing which configuration to practice and with which hand, the image and 3d plot of the chosen configuration is displayed as shown in the image below. 
+After choosing which configuration to practice and with which hand, the image and a 3d plot of the chosen configuration are displayed as shown in the image below. 
 
 <img src="/images/app1.png" width="400">
 
-You have to try to reproduce the configuration. If you perform it wrongly, a message is displayed indicating that your performance is incorrect and which configuration the system thinks you are performing instead.
+You have to try to reproduce the configuration. If you perform it wrongly, a message is displayed indicating that your performance is incorrect and which configuration the system thinks you are performing instead of the chosen one.
 
 A record of the performance is also saved and you can access it by pressing `PERFORMANCE SUMMARY` button. The percentages of the correct and incorrect performances are displayed, along with the ten most confusing configurations. 
 
