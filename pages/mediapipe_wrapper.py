@@ -2,9 +2,6 @@ import cv2
 import mediapipe as mp
 import numpy as np
 
-# filename = "/home/paxpan/Downloads/man-counting-five.jpg"
-# image = cv2.flip(cv2.imread(filename), 1)
-
 class MediapipeHolistic:
 
     def __init__(self):

@@ -56,13 +56,12 @@ def obtain_graph(medoid, animate=False):
                        xaxis_showaxeslabels=False, yaxis_showaxeslabels=False, zaxis_showaxeslabels=False)
 
     frames = []
-    x_eye = -0.05 # -1.25
-    y_eye = -0.3  # 2
-    z_eye = -2.5  # 0.5
+    x_eye = -0.05
+    y_eye = -0.3
+    z_eye = -2.5
 
     if not animate:
         fig3.update_layout(
-            # title='Animation Test',
             width=1200,
             height=1200,
             scene_camera_eye=dict(x=x_eye, y=y_eye, z=z_eye),
@@ -78,14 +77,13 @@ def obtain_graph(medoid, animate=False):
 
     else:
         fig3.update_layout(
-            # title='Animation Test',
             width=1200,
             height=1200,
             scene_camera_eye=dict(x=x_eye, y=y_eye, z=z_eye),
             updatemenus=[dict(type='buttons',
                             showactive=False,
-                            y=0.2,#1,
-                            x=1, #0.8,
+                            y=0.2,
+                            x=1,
                             xanchor='left',
                             yanchor='bottom',
                             pad=dict(t=45, r=10),
@@ -107,6 +105,4 @@ def obtain_graph(medoid, animate=False):
             frames.append(go.Frame(layout=dict(scene_camera_eye=dict(x=xe, y=ye, z=ze))))
         fig3.frames = frames
 
-    # fig3.update_layout(showlegend=False)
-    # fig3.show()
     return fig3

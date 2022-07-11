@@ -131,4 +131,5 @@ dmypy.json
 # Remove signs images and videos from github
 static/*
 dataset/images_signs/*
+dataset/configs/*/
 

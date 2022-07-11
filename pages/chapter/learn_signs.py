@@ -32,9 +32,6 @@ layout = html.Div([
             options=[dict((('label',topic), ('value',topic))) for topic in np.unique(signs_table['TOPIC'])],
             value = signs_table['TOPIC'][0],
             clearable=False,
-            #persistence=True,
-            #persistence_type='session',
-            #placeholder='Select sign...',
             style = {'width':'100%','display':'inline-block'},
         ),
         html.Label(['Word:'], style={'font-weight': 'bold', "text-align": "center"}),
@@ -43,29 +40,9 @@ layout = html.Div([
             options=[dict((('label',signo), ('value',signo))) for signo in signs_table[signs_table['TOPIC']==signs_table['TOPIC'][0]]['SIGNO']],
             value = signs_table['SIGNO'][0],
             clearable=False,
-            #persistence=True,
-            #persistence_type='session',
-            #placeholder='Select sign...',
             style = {'width':'100%','display':'inline-block'},
         ),
-        # html.Select(
-        #     id='a',
-        #     children=[
-        #         html.Optgroup(label='Animales'),
-        #         html.Option('Gato'),
-        #         html.Option('Perro'),
-        #         html.Optgroup(label='Comida'),
-        #         html.Option('Cereal')
-        #     ]
-        # ),
-        
         dcc.Interval(id='pred-sign-interval',interval=0.5*1000,n_intervals=0),
-        # IMAGE + VIDEO OF THE SELECTED SIGN
-        # html.Div([
-        #     html.Div('Selected sign:'),
-        #     html.Img(id='sign-img',src=None,style={'height':'30%', 'width':'30%','margin-left':'20px'}),
-        #     html.Video(id='video-sign',src=None, controls=True, style={'height':'37%', 'width':'37%','margin-left':'20px'})
-        # ], id='div-sel-sign',style={'display':'none'}),
         html.Div([
             html.Div('These are the configurations you must perform:',id='text_configs_number'),
             dcc.Store(id='store-configs',data=[]),
@@ -89,7 +66,6 @@ def change_topic(topic):
 
 @callback([Output('images-sign','children'), Output('imgs-conf-sign','style'),
            Output('store-configs','data'), Output('text_configs_number','children')], 
-           #Output('sign-img','src'),Output('video-sign','src'), Output('div-sel-sign','style'),
            Input('sign-dropdown','value'))
 def show_all_images(sign_name):
     
@@ -107,13 +83,6 @@ def show_all_images(sign_name):
     ],style={'width':width,'display':'inline-block'}) for index, config in enumerate(configs)]
     data_confs = configs
 
-    # IMAGE + VIDEO OF THE SELECTED SIGN
-    # sign_path_name = signs_table[signs_table['SIGNO']==sign_name]['PATH_IMG'].to_string(index=False)
-    # path_sign_img = 'dataset/images_signs/'+ sign_path_name + '.png'
-    # path_sign_vid = '/static/' + sign_path_name + '.mov'
-    # imgSigno_src='data:image/png;base64,{}'.format(base64.b64encode(open(path_sign_img, 'rb').read()).decode())
-    # style2={'display':'flex','margin-top':'20px'}
-
     style={'display':'inline-block','margin-top':'20px'}
     
     if num_configs==1:
@@ -121,7 +90,7 @@ def show_all_images(sign_name):
     else:
         text_configs_number = 'These are the ' + str(num_configs) + ' configurations you must perform:'
 
-    return children, style, data_confs, text_configs_number #,imgSigno_src, path_sign_vid, style2
+    return children, style, data_confs, text_configs_number 
 
 @callback(Output({'type':'img-sign','index':dash.dependencies.ALL},'style'),
           Input('pred-sign-interval','n_intervals'),

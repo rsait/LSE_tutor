@@ -7,13 +7,7 @@ from pages import help_functions
 
 dash.register_page(__name__, path='/medoids')
 
-from global_ import configurations, medoids, pngs, figures_medoids #, fingers
-
-# medoids = [help_functions.transform_data(medoid_functions.get_shape_medoid(
-#            pkl.load(open('dataset/configs/' + config + '/itsaso_newCam.pkl','rb')))) for config in configurations]
-# pkl.dump(medoids,open('dataset/configs/itsaso_newCam_allMEDOIDS.pkl','wb'))
-# figures = [medoid_functions.obtain_graph(medoid) for medoid in medoids]
-# pkl.dump(figures, open('dataset/configs/itsaso_newCam_allMEDOIDS_GRAPHS.pkl','wb'))
+from global_ import configurations, medoids, pngs, figures_medoids 
 
 layout = html.Div([
     html.Div([
@@ -22,7 +16,6 @@ layout = html.Div([
             html.Div(id='textarea-prediction-output', style={'whiteSpace': 'pre','width':'49%'}),
             html.Div(id='textarea-prediction-wrong', style={'whiteSpace': 'pre','width':'49%'}),
             html.Div(html.Img(id='img-config-wrong',src=None,style={'height':'20%', 'width':'20%'}),style={'width':'49%','display':'inline-block','verticalAlign':'top'}),
-            #dcc.Store(id='store-user-performance',data={'real':[],'pred':[], 'times':[]}),
             html.Div([
                 dbc.Button('PERFORMANCE SUMMARY',n_clicks=0,outline=True, color='primary',id='button-performance',href='/summary_user'),
             ]),  
@@ -47,16 +40,12 @@ layout = html.Div([
                 clearable=False,
                 persistence=True,
                 persistence_type='session'
-                #style = {'width':'130%'}
             )
         ]),
-        
-        # html.Div(id='textarea-classif', style={'whiteSpace': 'pre'}),
-        #pngs[0],
         html.Div(html.Img(id='img-config-medoid',src=None,style={'height':'50%', 'width':'50%'}),style={'width':'49%','display':'inline-block','verticalAlign':'top'}),                            
         html.Div(dcc.Graph(
             id='graph-medoid',
-            figure=figures_medoids[int(configurations[0])-1],#medoid_functions.obtain_graph(medoids[int(configurations[0])-1]), #medoid_functions.get_shape_medoid(pkl.load(open('dataset/configs/1/itsaso_newCam.pkl','rb')))),
+            figure=figures_medoids[int(configurations[0])-1],
             responsive=True,
             style={
                 'width': '100%',
@@ -78,10 +67,6 @@ layout = html.Div([
            Input('config-medoid','value'), prevent_initial_call=False)
 def show_medoid_graph(configuration):
 
-    # # data = pkl.load(open('dataset/configs/' + configuration + '/itsaso_newCam.pkl','rb'))
-    # # medoid = medoid_functions.get_shape_medoid(data)
-    # medoid = medoids[int(configuration)-1]
-    # figure_actual = medoid_functions.obtain_graph(medoid)
     figure_actual = figures_medoids[int(configuration)-1]
     style = {
                 'width': '100%',
@@ -96,10 +81,10 @@ def show_medoid_graph(configuration):
 
 @callback([Output('textarea-prediction-output','children'), Output('textarea-prediction-output','style'), 
           Output('img-config-wrong','src'), Output('textarea-prediction-wrong','children'),
-          Output('store-user-performance-prueba','data')], #Output('store-user-performance','data'), 
+          Output('store-user-performance-prueba','data')],
           Input('interval-prediction','n_intervals'),
           [State('config-medoid','value'), State('textarea-prediction-output','style'), 
-          State('store-user-performance-prueba','data'), State('which-hand','value')]) #State('store-user-performance','data'),
+          State('store-user-performance-prueba','data'), State('which-hand','value')])
 def make_prediction_medoid(interval, config_value, actual_style, data, which_hand):
     import global_
     png_actual = None
@@ -126,28 +111,8 @@ def make_prediction_medoid(interval, config_value, actual_style, data, which_han
 
             data['errors'][int(config_value)-1][int(result)-1] +=1
 
-            # # GUARDAR SOLO LOS FALLOS
-            # if(len(saved_preds['pred'])>24):
-            #     saved_preds['pred'].pop(0)
-            #     saved_preds['real'].pop(0)
-
-            # saved_preds['pred'].append(result)
-            # saved_preds['real'].append(config_value)
-
         data['total'] += 1 
-        # #tr1, tr2 = medoid_functions.procrustes_disparity_transformed_matrices(medoids[min_index],landmarks_to_predict)
-        # for finger in range(5):
-        #     medoid_finger = medoids[min_index][finger*4+1:finger*4+5,:]
-        #     landmark_finger = landmarks_to_predict[finger*4+1:finger*4+4+1,:] 
-        #     print(fingers[finger])
-        #     print(medoid_finger)
-        #     print(landmark_finger)
-        #     close = np.allclose(medoid_finger,landmark_finger, rtol=0, atol=1e-01) #rtol=1e-03, atol=1e-01)
-        #     print(close)
-        #     print('--------------------------------')
-        #     if not close:
-        #         result = result + ' - Please pay attention to your ' + fingers[finger] + ' finger'
 
-        return result, style, png_actual, text, data #saved_preds,
+        return result, style, png_actual, text, data 
 
-    return '', actual_style, png_actual, text, data #saved_preds, 
+    return '', actual_style, png_actual, text, data 

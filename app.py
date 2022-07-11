@@ -14,7 +14,6 @@ mp_drawing = mp.solutions.drawing_utils
 mp_holistic = mp.solutions.holistic
 
 holistic_instance = mpu.MediapipeHolistic()
-#landmarks_now = None
 
 class VideoCamera(object):
     def __init__(self):
@@ -26,7 +25,6 @@ class VideoCamera(object):
     def get_frame(self):
         global global_frame
         success, image = self.video.read()
-        # print(success)
         global_frame = image.copy()
         ret, jpeg = cv2.imencode('.jpg', image)
         return jpeg.tobytes(), global_frame
@@ -55,11 +53,9 @@ navbar = dbc.NavbarSimple(
 app.layout = dbc.Container(
     [
         dcc.Store(id='store-user-performance-prueba', data={'total':0,'correct':0,'errors':np.zeros(shape=(42,42))}),
-        #dcc.Store(id='store-user-performance',data={'real':[],'pred':[]}),#, 'times':[]}),
         navbar,
         dbc.Row(
             [
-                #dbc.Col([sidebar_button], width=1),
                 dbc.Col([dl.plugins.page_container]),
             ]
         ),
@@ -77,19 +73,13 @@ def gen_last_frame(camera):
     :param camera: camera from which the frames are recorded
     :type camera: app.VideoCamera()
     """
-    # global global_frame
-    # global landmarks_now
-    # global visible_right_hand
     while True:
         frame, global_frame = camera.get_frame()
 
         holistic_instance.process_image(global_frame)
         
-
-        #image_hight, image_width, _ = global_frame.shape
         # Convert the BGR image to RGB before processing.
         results = holistic_instance.results_holistic
-        # results = holistic.process(cv2.cvtColor(global_frame, cv2.COLOR_BGR2RGB))
 
         # Draw pose, left and right hands, and face landmarks on the image.
         annotated_image = global_frame.copy()
@@ -103,23 +93,16 @@ def gen_last_frame(camera):
             annotated_image, results.pose_landmarks, mp_holistic.POSE_CONNECTIONS)
         
         import global_
-        # Save right hand landmaks in landmarks_now variable.
         if(holistic_instance.there_is_right_hand()):
             global_.landmarks_right = holistic_instance.landmarks_to_array("RIGHT",flatten=False)
         else:
-            global_.landmarks_right = None #np.empty(shape=(21*3))
+            global_.landmarks_right = None
 
         if(holistic_instance.there_is_left_hand()):
             global_.landmarks_left = holistic_instance.landmarks_to_array("LEFT", flatten=False)
         else:
-            global_.landmarks_left = None #np.empty(shape=(21*3))
-        
-        # import global_
-        # #landmarks = landmarks_now
-        # global_.landmarks = landmarks_now
-        # #global_.frame = frame #global_frame
+            global_.landmarks_left = None
 
-        # gray_frame = cv2.cvtColor(global_frame, cv2.COLOR_BGR2GRAY)
         ret, jpeg = cv2.imencode('.jpg', annotated_image)
         frame = jpeg.tobytes()
         yield (b'--frame\r\n'

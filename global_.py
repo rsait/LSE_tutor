@@ -5,7 +5,6 @@ import pandas as pd
 landmarks_right = None
 landmarks_left = None
 index = 0
-# frame = None
 
 configurations = ['{}'.format(x) for x in range(1,43)]
 

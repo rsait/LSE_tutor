@@ -33,10 +33,10 @@ layout = html.Div([
 
 @callback([Output(component_id='table-performance', component_property='data'),
      Output(component_id='table-performance', component_property='columns'),
-     Output('textarea-correct-percentage','children')],#[Output('table-results','children'), Output('table-results','style')],
+     Output('textarea-correct-percentage','children')],
           Input('store-user-performance-prueba', 'modified_timestamp'),
-          Input('store-user-performance-prueba','data')) #Input('store-user-performance','data')
-def print_now(ts, data): #saved_preds,
+          Input('store-user-performance-prueba','data'))
+def print_now(ts, data):
 
     if data['total'] != 0:
         real_config, predicted =np.where(np.array(data['errors'])!=0)
@@ -46,8 +46,6 @@ def print_now(ts, data): #saved_preds,
                             'pred': np.array(predicted)+1,
                             'size': [round(x,2) for x in np.array(values)/data['total']*100.0]})
 
-        # df = pd.DataFrame.from_dict(saved_preds)
-        # df = df.groupby(df.columns.tolist(),as_index=False).size()
         df = df.sort_values('size', ascending=False)
 
         df.columns = ['Chosen configuration', 'Performed configuration', '% Wrong performances']

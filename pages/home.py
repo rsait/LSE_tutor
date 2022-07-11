@@ -5,14 +5,9 @@ import base64
 
 dash.register_page(__name__, path="/")
 
-# app = Dash(__name__, suppress_callback_exceptions=True)
-# server = app.server
-
-
 layout = html.Div([
     html.Div([
         html.Div("In the Spanish Sign Language (LSE), apart from the body position and facial expression, four different manual elements define the articulation of the sign:"),
-        #html.Div(html.Img(id='img-config-medoid',src='data:image/png;base64,{}'.format(base64.b64encode(open("dataset/elements.png", 'rb').read()).decode()))),#style={'width':'40%','height':'40%'})),
         html.Div(
             children=[
                 html.Ul(id='my-list', children=[
@@ -30,9 +25,3 @@ layout = html.Div([
     ], style={'width':'100%', 'display':'inline-block'}, className="d-grid gap-2 col-6 mx-auto"),                           
 
 ], style={'display':'flex'})
-
-
-# if __name__ == '__main__':
-#     app.run_server(debug=True)
-
-
