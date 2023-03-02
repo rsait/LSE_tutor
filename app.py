@@ -8,6 +8,7 @@ import pages.mediapipe_wrapper as mpu
 import mediapipe as mp
 import sys
 import numpy as np
+import global_
 
 #Mediapipe
 mp_drawing = mp.solutions.drawing_utils
@@ -92,7 +93,6 @@ def gen_last_frame(camera):
         mp_drawing.draw_landmarks(
             annotated_image, results.pose_landmarks, mp_holistic.POSE_CONNECTIONS)
         
-        import global_
         if(holistic_instance.there_is_right_hand()):
             global_.landmarks_right = holistic_instance.landmarks_to_array("RIGHT",flatten=False)
         else:
@@ -122,4 +122,3 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         host_address = sys.argv[1]
     app.run_server(host=host_address, debug=True)
-

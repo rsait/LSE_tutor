@@ -6,10 +6,10 @@
 # docker run -it --rm -e DISPLAY=unix$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -p 8050:8050 --device /dev/video0 lse_tutor /bin/bash -c 'cat /lse_tutor.readme.txt; cd /lse_tutor; python3 app.py 0.0.0.0'
 
 #Download base image ubuntu
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 # LABEL about the custom image
-LABEL maintainer="nobody@nowhere.com"
+LABEL maintainer="josemaria.martinezo@ehu.eus"
 LABEL version="0.1"
 LABEL description="LSE tutor"
 
@@ -21,17 +21,16 @@ RUN apt-get update && \
     
 RUN apt-get install -y libgl1-mesa-glx libglib2.0-0 libsm6 libxrender1 libxext6
     
-RUN pip install dash && \
-    pip install dash_labs && \
-    pip install dash_bootstrap_components
+RUN pip install dash==2.3.1 && \
+    pip install dash_labs==1.0.4 && \
+    pip install dash_bootstrap_components==1.1.0
 
-RUN pip install mediapipe
-RUN pip install pandas
-RUN pip install scipy
+RUN pip install mediapipe==0.9.1.0
+RUN pip install pandas==1.5.3
+RUN pip install scipy==1.10.1
     
 COPY lse_tutor.readme.txt /
 
 RUN mkdir lse_tutor
 COPY . lse_tutor
-
 
