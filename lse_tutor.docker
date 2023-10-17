@@ -21,14 +21,43 @@ RUN apt-get update && \
     
 RUN apt-get install -y libgl1-mesa-glx libglib2.0-0 libsm6 libxrender1 libxext6
     
-RUN pip install dash==2.3.1 && \
-    pip install dash_labs==1.0.4 && \
-    pip install dash_bootstrap_components==1.1.0
+ RUN pip install dash==2.8.1 && \
+     pip install dash_labs==1.0.4 && \
+     pip install dash_bootstrap_components==1.4.0
 
 RUN pip install mediapipe==0.9.1.0
 RUN pip install pandas==1.5.3
 RUN pip install scipy==1.10.1
-    
+
+RUN pip install absl-py==1.4.0
+RUN pip install attrs==22.2.0
+RUN pip install click==8.1.3
+RUN pip install contourpy==1.0.7
+RUN pip install cycler==0.11.0
+RUN pip install dash-core-components==2.0.0
+RUN pip install dash-html-components==2.0.0
+RUN pip install dash-table==5.0.0
+RUN pip install Flask==2.2.3
+RUN pip install flatbuffers==23.3.3
+RUN pip install fonttools==4.38.0
+RUN pip install itsdangerous==2.1.2
+RUN pip install Jinja2==3.1.2
+RUN pip install kiwisolver==1.4.4
+RUN pip install MarkupSafe==2.1.2
+RUN pip install matplotlib==3.7.1
+RUN pip install numpy==1.24.2
+RUN pip install opencv-contrib-python==4.7.0.72
+RUN pip install packaging==23.0
+RUN pip install Pillow==9.4.0
+RUN pip install plotly==5.13.1
+RUN pip install protobuf==3.20.3
+RUN pip install pyparsing==3.0.9
+RUN pip install python-dateutil==2.8.2
+RUN pip install pytz==2022.7.1
+RUN pip install six==1.16.0
+RUN pip install tenacity==8.2.2
+RUN pip install Werkzeug==2.2.3
+
 COPY lse_tutor.readme.txt /
 
 RUN mkdir lse_tutor
